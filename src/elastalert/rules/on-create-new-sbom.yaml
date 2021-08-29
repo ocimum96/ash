@@ -1,0 +1,10 @@
+index: "test-sbom-cyclonedx"
+name: on-create-new-sbom
+type: any
+alert:
+  - "command"
+  - "debug"
+command: ["printf", "{_id}"]  
+timestamp_field: "created_at"
+include: 
+  - "_id"
