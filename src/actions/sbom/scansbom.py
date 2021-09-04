@@ -10,6 +10,7 @@ from primrose.wrapper import Primrose
 from packageurl import PackageURL
 
 class ScanSBOM(BaseAction):
+    
     def __init__(self, name, description):
         self.docId = 0
         super().__init__(name, description=description)
@@ -21,8 +22,12 @@ class ScanSBOM(BaseAction):
             self.docId = kwargs["id"]
         if self.docId == 0 :
             self.logger.warning("doc id is not set. Ignoring execution.")
-            return 0
-        self._scanSbomDoc()
+            return BaseAction.ERR_CODE_INVALID_PARAM
+        try:
+            self._scanSbomDoc()
+        except Exception as e:
+            self.logger.warn("Exception occured. " + e)
+            return BaseAction.ERR_CODE_UNKNOWN_ERR
         return super().exec()
 
     def _scanSbomDoc(self):

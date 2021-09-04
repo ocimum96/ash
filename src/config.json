@@ -1,0 +1,11 @@
+{
+    "scheduler":
+    [
+        {
+            "scheduler.pygenericscheduler.PyGenericScheduler" : {
+                "enabled": "true",
+                "module": "scheduler.pygenericscheduler.PyGenericScheduler"
+            }
+        }
+    ]
+}

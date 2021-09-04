@@ -8,6 +8,11 @@ from common.logger import Logger
 import logging
 
 class BaseAction(ABC):
+
+    ERR_CODE_NO_ERROR = 0
+    ERR_CODE_INVALID_PARAM = 1
+    ERR_CODE_UNKNOWN_ERR = 8
+    
     def __init__(self, name, description=None):
         self.name = name
         self.description = description
@@ -20,4 +25,5 @@ class BaseAction(ABC):
             for k, v in kwargs.items():
                 logger.debug("Passed args key: {}, value: {}".format(k,v))
         logger.info("Ran action: {}".format(self.name))
+        return ERR_CODE_NO_ERROR
         
