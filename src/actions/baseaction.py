@@ -10,7 +10,7 @@ import logging
 class BaseAction(ABC):
     def __init__(self, name, description=None):
         self.name = name
-        self.name = description
+        self.description = description
         super().__init__()
     
     @abstractmethod

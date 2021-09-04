@@ -17,11 +17,12 @@ class TestScanSbomDoc(TestCase):
             def CreateMaven():
                 return "mocked-sbom-doc-id"
 
-        with patch('actions.sbom.scansbom.Primrose', autospec=True) as primroseMocked:
-            primroseMocked.GetSbomById.return_value = PrimroseMock.GetSbomById()
-            primroseMocked.CreateMaven.return_value = PrimroseMock.CreateMaven()
+        with patch('actions.sbom.scansbom.Primrose', autospec=False) as primroseMocked:
+            primroseMocked.return_value.GetSbomById.return_value = PrimroseMock.GetSbomById()
+            primroseMocked.return_value.CreateMaven.return_value = PrimroseMock.CreateMaven()
             ScanSBOM(name="simple-scan-sbom", description="for ut").exec(id=1)
-            primroseMocked.CreateMaven.assert_called()
+            primroseMocked.return_value.GetSbomById.assert_called()
+            primroseMocked.return_value.CreateMaven.assert_called()
 
 
 if __name__ == '__main__':

@@ -32,7 +32,7 @@ class ScanSBOM(BaseAction):
         '''
         primroseClient = Primrose()
         sbomJson = primroseClient.GetSbomById(self.docId)
-        if sbomJson is not dict:
+        if sbomJson is None:
             raise Exception("Document not correct. Got: {}".format(sbomJson))
         for component in sbomJson["components"]:
             purl = component["purl"]
