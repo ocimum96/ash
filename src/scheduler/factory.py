@@ -5,6 +5,7 @@ Helper class to create scheduler instances required.
 from common.application import Application
 from common.logger import Logger
 from common.utils import PluginHelper
+from scheduler.basescheduler import BaseScheduler
 
 class SchedulerFactory:
     
@@ -15,7 +16,9 @@ class SchedulerFactory:
             return None
         config = {}
         try:
-            config = Application.GetInstance().ConfigData["scheduler"][name]
+            config = Application.GetInstance().ConfigData["schedulers"][name]
+            l.debug("Config for {}".format(name))
+            l.debug(config)
         except Exception as e:
             l.warning("Config err for scheduler : {} ".format(name))
             return None
@@ -38,8 +41,12 @@ class SchedulerFactory:
             l.error("Could not enable module {} ".format(schedulerModuleName))
             raise Exception("Module created is None.")
         else:
-            l.info("Created instace for scheduler {} ".format(name))
-            return registered_scheduler
+            if isinstance(registered_scheduler, BaseScheduler):
+                l.info("Created instace for scheduler {} ".format(name))
+                return registered_scheduler
+            else:
+                l.critical("Failed to create an action instance.")
+                raise Exception("Not a Scheduler type instance")
         
             
         

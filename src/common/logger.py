@@ -1,7 +1,7 @@
 import logging
 
 class Logger:
-    log_format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    log_format = "%(asctime)s - %(name)s - %(lineno)d - %(levelname)s - %(message)s"
     log_level = logging.DEBUG
 
     @staticmethod

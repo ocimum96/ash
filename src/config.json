@@ -1,11 +1,18 @@
 {
-    "scheduler":
-    [
+    "schedulers":
+    {
+        "PyGenericScheduler":
         {
-            "scheduler.pygenericscheduler.PyGenericScheduler" : {
                 "enabled": "true",
                 "module": "scheduler.pygenericscheduler.PyGenericScheduler"
-            }
         }
-    ]
+    },
+    "actions":
+    {
+        "SimpleLogAction":
+        {
+            "enabled": "true",
+            "module": "actions.simplelogaction.SimpleLogAction"
+        }
+    }
 }

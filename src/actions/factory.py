@@ -5,6 +5,7 @@ Helper class to create action instances required.
 from common.application import Application
 from common.logger import Logger
 from common.utils import PluginHelper
+from actions.baseaction import BaseAction
 
 class ActionFactory:
     
@@ -16,6 +17,8 @@ class ActionFactory:
         config = {}
         try:
             config = Application.GetInstance().ConfigData["actions"][name]
+            l.debug("Config for {}".format(name))
+            l.debug(config)
         except Exception as e:
             l.warning("Config err for action : {} ".format(name))
             return None
@@ -38,8 +41,11 @@ class ActionFactory:
             l.error("Could not enable module {} ".format(actionModuleName))
             raise Exception("Module created is None.")
         else:
-            l.info("Created instace for action {} ".format(name))
-            return registered_action
+            if isinstance(registered_action, BaseAction):
+                l.info("Created instace for action {} ".format(name))
+                return registered_action
+            else:
+                raise Exception("Not an Action type instance")
         
             
         

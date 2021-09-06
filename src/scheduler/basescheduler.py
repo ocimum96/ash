@@ -18,12 +18,12 @@ class BaseScheduler(ABC):
     def Schedule(self, **kwargs):
         if Logger.log_level <= logging.INFO:
             l = Logger.getLogger(__name__)
-            if self.isBlocking:
-                l.info("Ran action {} using scheduler {}.".format(self.ActionName), \
-                    self.SchedulerName)
+            if self.IsBlocking:
+                l.info("Ran action {} using scheduler {}.".format(self.ActionName, \
+                    self.SchedulerName))
             else:
-                l.info("Scheduled action {} using scheduler {}.".format(self.ActionName), \
-                    self.SchedulerName)
+                l.info("Scheduled action {} using scheduler {}.".format(self.ActionName, \
+                    self.SchedulerName))
     
     # @abstractmethod
     # def FallbackScedule(self, **kwargs):

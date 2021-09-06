@@ -17,7 +17,7 @@ class PyGenericScheduler(BaseScheduler):
             action = ActionFactory.GetAction(self.ActionName)       
             if action is not None:
                 try:
-                    action.exec(kwargs)
+                    action.exec(**kwargs)
                 except Exception as e:
                     l.critical("Exception on running action {} ".format(self.ActionName))
                     l.warn(e)

@@ -25,5 +25,5 @@ class BaseAction(ABC):
             for k, v in kwargs.items():
                 logger.debug("Passed args key: {}, value: {}".format(k,v))
         logger.info("Ran action: {}".format(self.name))
-        return ERR_CODE_NO_ERROR
+        return self.ERR_CODE_NO_ERROR
         

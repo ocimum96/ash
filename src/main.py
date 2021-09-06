@@ -16,9 +16,9 @@ if __name__ == "__main__":
     argParse = argparse.ArgumentParser()
     argParse.add_argument("--config-file", metavar='c', nargs=1, default="config.json", required=False, \
         help="pass config file path")
-    argParse.add_argument("--scheduler", nargs=1, default="scheduler.pygenericscheduler.PyGenericScheduler", \
+    argParse.add_argument("--scheduler", nargs=1, default="PyGenericScheduler", \
         help="scheduler name to be used.", metavar='s', required=False)
-    argParse.add_argument("--action", nargs=1, default="actions.simplelogaction.SimpleLogAction", \
+    argParse.add_argument("--action", nargs=1, default="SimpleLogAction", \
         required=False, metavar='a', help="action to be executed.")
     # argParse.add_argument()
     args = argParse.parse_args()
