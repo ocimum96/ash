@@ -130,3 +130,5 @@ dmypy.json
 
 scratch.txt
 .vscode
+bin/
+pkg/
