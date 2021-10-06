@@ -1,7 +1,7 @@
 
 from importlib import import_module
 from common.logger import Logger
-
+from actions.sbom.scansbom import ScanSBOM
                
 class PluginHelper:
     @staticmethod
@@ -11,10 +11,11 @@ class PluginHelper:
         if name is None or name == '':
             raise Exception("Module name cannot be empty.")
         try:
-            (module, x, classname) = name.rpartition('.')
+            (module, x, classname) = name.rpartition('.')            
 
             if module == '' or module is None:
                 raise Exception("Module name {} is invalid".format(name))
+            l.debug("Loading module: {} and class {}".format(module, classname))
             mod = import_module(module)
             klass = getattr(mod, classname)
         except Exception as ex:

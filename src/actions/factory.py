@@ -21,6 +21,7 @@ class ActionFactory:
             l.debug(config)
         except Exception as e:
             l.warning("Config err for action : {} ".format(name))
+            l.debug(e)
             return None
         
         if config["enabled"] == False :

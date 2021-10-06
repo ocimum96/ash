@@ -13,6 +13,15 @@
         {
             "enabled": "true",
             "module": "actions.simplelogaction.SimpleLogAction"
+        },
+        "ScanSbomAction":
+        {
+            "enabled": "true",
+            "module": "actions.sbom.scansbom.ScanSBOM"
         }
+    },
+    "primrose":
+    {
+        "grpc": "localhost:50051"
     }
 }

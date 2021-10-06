@@ -39,15 +39,21 @@ class ScanSBOM(BaseAction):
         sbomJson = primroseClient.GetSbomById(self.docId)
         if sbomJson is None:
             raise Exception("Document not correct. Got: {}".format(sbomJson))
+        
         for component in sbomJson["components"]:
-            purl = component["purl"]
-            purlDict = PackageURL.from_string(purl).to_dict()
-            if purlDict['type'] == 'maven' :
-                g = component["group"]
-                a = component["name"]
-                v = component["version"]
-                idCreated = primroseClient.CreateMaven(g, a, v, purl=purl)
-                self.logger.info("Primrose create-maven-doc API returned id {} ".format(idCreated))
-            else:
-                self.logger.warning("Component type {} is unknown.".format(purlDict['type']))
+            try:
+                purl = component["purl"] #TODO: What if PURL not available for the component?
+                purlDict = PackageURL.from_string(purl).to_dict()
+                if purlDict['type'] == 'maven' :
+                    g = component["group"]
+                    a = component["name"]
+                    v = component["version"]
+                    idCreated = primroseClient.CreateMaven(g, a, v, purl=purl)
+                    self.logger.info("Primrose create-maven-doc API returned id {} ".format(idCreated))
+                else:
+                    self.logger.warning("Component type {} is unknown.".format(purlDict['type']))
+            except KeyError as e:
+                self.logger.warning("Key error while parsing SBOM.")
+                self.logger.warn("Key not found {}".format(e))
+                continue
 
