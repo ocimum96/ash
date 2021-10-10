@@ -42,16 +42,17 @@ class ScanSBOM(BaseAction):
         
         for component in sbomJson["components"]:
             try:
-                purl = component["purl"] #TODO: What if PURL not available for the component?
-                purlDict = PackageURL.from_string(purl).to_dict()
-                if purlDict['type'] == 'maven' :
-                    g = component["group"]
-                    a = component["name"]
-                    v = component["version"]
-                    idCreated = primroseClient.CreateMaven(g, a, v, purl=purl)
-                    self.logger.info("Primrose create-maven-doc API returned id {} ".format(idCreated))
-                else:
-                    self.logger.warning("Component type {} is unknown.".format(purlDict['type']))
+                if component["type"] == "library": #Continue only if its a library
+                    purl = component["purl"] #TODO: What if PURL not available for the component?
+                    purlDict = PackageURL.from_string(purl).to_dict()
+                    if purlDict['type'] == 'maven' :
+                        g = component["group"]
+                        a = component["name"]
+                        v = component["version"]
+                        idCreated = primroseClient.CreateMaven(g, a, v, purl=purl)
+                        self.logger.info("Primrose create-maven-doc API returned id {} ".format(idCreated))
+                    else:
+                        self.logger.warning("Component type {} is unknown.".format(purlDict['type']))
             except KeyError as e:
                 self.logger.warning("Key error while parsing SBOM.")
                 self.logger.warn("Key not found {}".format(e))
