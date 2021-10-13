@@ -26,7 +26,7 @@ class ScanSBOM(BaseAction):
         try:
             self._scanSbomDoc()
         except Exception as e:
-            self.logger.warn("Exception occured. " + e)
+            self.logger.warn("Exception occured. " + str(e))
             return BaseAction.ERR_CODE_UNKNOWN_ERR
         return super().exec()
 
@@ -49,12 +49,20 @@ class ScanSBOM(BaseAction):
                         g = component["group"]
                         a = component["name"]
                         v = component["version"]
-                        idCreated = primroseClient.CreateMaven(g, a, v, purl=purl)
-                        self.logger.info("Primrose create-maven-doc API returned id {} ".format(idCreated))
+                        res = primroseClient.CreateMaven(g, a, v, purl=purl)
+                        if res:
+                            self.logger.info("Primrose New Maven-doc created.")
+                        else:
+                            self.logger.critical("Primrose new Maven doc create call failed. Quiting the action.")
+                            break #Other calls are also likely to fail.
                     else:
                         self.logger.warning("Component type {} is unknown.".format(purlDict['type']))
             except KeyError as e:
                 self.logger.warning("Key error while parsing SBOM.")
                 self.logger.warn("Key not found {}".format(e))
                 continue
+            except Exception as e:
+                self.logger.critical("Unknown exception occured.")
+                self.logger.debug(str(e))
+                break
 
