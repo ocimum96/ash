@@ -1,0 +1,27 @@
+{
+    "schedulers":
+    {
+        "PyGenericScheduler":
+        {
+                "enabled": "true",
+                "module": "scheduler.pygenericscheduler.PyGenericScheduler"
+        }
+    },
+    "actions":
+    {
+        "SimpleLogAction":
+        {
+            "enabled": "true",
+            "module": "actions.simplelogaction.SimpleLogAction"
+        },
+        "ScanSbomAction":
+        {
+            "enabled": "true",
+            "module": "actions.sbom.scansbom.ScanSBOM"
+        }
+    },
+    "primrose":
+    {
+        "grpc": "localhost:50051"
+    }
+}

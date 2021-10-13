@@ -1,0 +1,11 @@
+index: "test-sbom-cyclonedx"
+name: on-create-new-sbom
+type: any
+alert:
+  - "command"
+  # - "debug"
+# command: ["printf", "{_id}"]  
+command: ["python", "main.py", "--action", "ScanSbomAction", "id={_id}"]
+timestamp_field: "@timestamp"
+include: 
+  - "_id"
