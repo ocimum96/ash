@@ -38,7 +38,7 @@ class ScanMavenDocument(BaseAction):
         Call Primrose to update the Maven document with the identified data.
         '''
         primroseClient = Primrose()
-        mvnJson = primroseClient.GetMavenDocById(self._docID)
+        _ , mvnJson = primroseClient.GetMavenDocById(self._docID)
         if mvnJson is None:
             raise Exception("Maven document is empty!")
         purl = mvnJson["purl"]
