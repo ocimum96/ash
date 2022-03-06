@@ -38,7 +38,7 @@ class ScanSBOM(BaseAction):
         primroseClient = Primrose()
         sbomJson = primroseClient.GetSbomById(self.docId)
         if sbomJson is None:
-            raise Exception("Document not correct. Got: {}".format(sbomJson))
+            raise Exception("Document not correct.")
         
         for component in sbomJson["components"]:
             try:
@@ -49,7 +49,7 @@ class ScanSBOM(BaseAction):
                         g = component["group"]
                         a = component["name"]
                         v = component["version"]
-                        res = primroseClient.CreateMaven(g, a, v, purl=purl)
+                        res = primroseClient.CreateMaven(g, a, v, purl=purl) # TODO: Need to make purl as the only required param. 
                         if res:
                             self.logger.info("Primrose New Maven-doc created.")
                         else:
