@@ -31,9 +31,8 @@ class MavenResolver:
             urlTuple = ('https', self._url, httpUrlPathtoFile, None, None, None)
             finalUrl = urllib.parse.urlunparse(urlTuple)
             l.debug("Calling GET on {}".format(finalUrl))
-            r = requests.get(finalUrl, timeout=10)
-            s = r.status_code
-            return r.text, s
+            r = requests.get(finalUrl, timeout=10)        
+            return r.text, r.reason, r.status_code
 
     def __init__(self, group, artifact, version) -> None:
         self._logger = Logger.getLogger(__name__)
@@ -51,33 +50,66 @@ class MavenResolver:
 
     def _fillTheResolverList(self):
         '''
-        Create all the configured resolvers and add it in a list, to use it
+        Create all the configured/known resolvers and add it in a list, to use it
         based on insertion order.
         '''
+        
         self._logger.debug("Filling the resolver list..")        
+
+        #TODO: Read the Repo details from config file, so that user can config custom mvn repos.
         centralMavenRepo = MavenResolver._mavenRepository("central-maven", "repo1.maven.org/maven2")
         atlasianMavenRepo = MavenResolver._mavenRepository("atlasian-external-maven", "packages.atlassian.com/mvn/maven-atlassian-external")
         self._resolversList.append(centralMavenRepo)
         self._resolversList.append(atlasianMavenRepo)
+
         self._logger.debug("Done creating and appending resolvers to the list.")
 
-    def ResolveMetadata(self) -> dict:
+    def ResolveMetadata(self) -> str:
         '''
-        Resolve the metadata xml and return it as json dict.
+        Resolve the metadata xml and return it as xml str.
         '''
         urlPathToFile = self._group + '/' + self._artifact + '/' + "maven-metadata.xml"
+        xmlData = self._resolveFile(urlPathToFile)    
+        if xmlData is None:
+            raise MavenResolver.FileNotResolvedException("Not able to resolve metadata for {}.{}"
+            .format(self._group, self._artifact))     
+        else:                   
+            self._logger.debug("Got maven xml metadata: " + xmlData)
+            return xmlData     
+
+    def ResolvePOMfile(self) -> str:
+        '''
+        Resolve the POM file and return as a str
+        '''
+        urlPathToFile = self._group + '/' + self._artifact + '/' + self._version + '/' + self._artifact + '-' + self._version + ".pom"
+        xmlData = self._resolveFile(urlPathToFile)   
+        if xmlData is None:
+            raise MavenResolver.FileNotResolvedException("Not able to resolve POM file for {}.{}.{}"
+            .format(self._group, self._artifact, self._version))
+        else:             
+            self._logger.debug("Got maven pom data: " + xmlData)
+            return xmlData    
+        
+    def _resolveFile(self, urlPathToFile) -> str:
+        '''
+        A helper file to fetch a file from the MVN repos and return as text.
+        '''        
+        text = None
         for mavenRepo in self._resolversList:
             self._logger.debug("Trying with repo: {}".format(mavenRepo.id))
-            xmlData, s = mavenRepo.getFile(urlPathToFile)
-            if s == HTTPStatus.OK:
-                self._logger.debug("Got maven xml metadata: " + xmlData)
-                break            
+            text, reason, status_code = mavenRepo.getFile(urlPathToFile)
+            if status_code == HTTPStatus.OK:   
+                self._logger.debug("The file is resolved.")             
+                break       
+            else:
+                self._logger.debug("File not resolved. Got reason : {}".format(reason))
+                text = None # some Maven repo returns error texts, discard that.
+        return text     
 
-    def ResolvePOMfile(self) -> dict:
-        '''
-        Resolve the POM file and return as a dict
-        '''
-        pass
+    class FileNotResolvedException(BaseException):
+        """Raised when all repos are tried and file not resolved"""
+        def __init__(self, *args: object) -> None:
+            super().__init__(*args)
 
 
 
