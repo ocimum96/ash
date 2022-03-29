@@ -1,0 +1,7 @@
+<project>
+<script/>
+<modelVersion>4.0.0</modelVersion>
+<groupId>antlr</groupId>
+<artifactId>antlr</artifactId>
+<version>2.7.1</version>
+</project>

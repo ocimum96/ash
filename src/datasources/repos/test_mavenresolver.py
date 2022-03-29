@@ -1,4 +1,3 @@
-from curses import meta
 from unittest import TestCase, main
 from datasources.repos.mavenresolver import MavenResolver
 
