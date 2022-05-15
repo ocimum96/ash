@@ -139,7 +139,7 @@ class ScanMavenDocument(BaseAction):
             self.dataDict = dataDict
 
         def _handleProject(self, document):
-            
+            pass
 
         def _handleBasics(self, project):
             pass
